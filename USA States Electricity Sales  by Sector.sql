@@ -152,4 +152,17 @@ select [Census Division_and State],(([Commercial April 2024 YTD]-[Commercial Apr
   from [USA_Electricity_Sales].[dbo].[USA Sales 2023-2024$] 
  where  [Census Division_and State] NOT IN ('U.S. Total','East North Central', 'New England','East Noth Central','West North Central',
   'East South Central','West South Central','Pacific Noncontiguous','South Atlantic','Pacific Contiguous','Middle Atlantic','Mountain') 
+
+Year to year Revenue & Sales growth for Resudnetial Sector of Electricity Sales 
+with Info 
+as 
+(
+select Year,State,Residential_Revenue as Current_Year_Revenue, LAG(Residential_Revenue) over(partition by State order by Year DESC) as Prev_Year_Revenue,
+[Residential_Sales(Megawatthours)] as Current_Year_Sales,LAG([Residential_Sales(Megawatthours)]) over(partition by State order by Year DESC) as Prev_Year_Residential_Sales
+from [USA_Electricity_Sales].[dbo].['State-YTD-States$']
+where State IN('TX','CA','NY','FL','PA','IL','GA')
+)
+--year to year growth in revenue
+ select Year,State,Current_Year_Revenue,Prev_Year_Revenue,(100*(Current_Year_Revenue-Prev_Year_Revenue)/Prev_Year_Revenue) as Year_To_Year_Revenue_Growth,Current_Year_Sales,Prev_Year_Residential_Sales,(100*(Current_Year_Sales-Prev_Year_Residential_Sales)/Prev_Year_Residential_Sales) as Year_To_Year_Sales_Growth
+ from Info
  
