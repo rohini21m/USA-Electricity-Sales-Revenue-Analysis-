@@ -165,4 +165,14 @@ where State IN('TX','CA','NY','FL','PA','IL','GA')
 --year to year growth in revenue
  select Year,State,Current_Year_Revenue,Prev_Year_Revenue,(100*(Current_Year_Revenue-Prev_Year_Revenue)/Prev_Year_Revenue) as Year_To_Year_Revenue_Growth,Current_Year_Sales,Prev_Year_Residential_Sales,(100*(Current_Year_Sales-Prev_Year_Residential_Sales)/Prev_Year_Residential_Sales) as Year_To_Year_Sales_Growth
  from Info
+--query for cummulative month sales
+SELECT TOP (1000) [Year]
+      ,[Months]
+      ,[State]
+      ,[Revenue_Sales-Megawatthours],sum([Revenue_Sales-Megawatthours]) over(order by Months) as Cummulative_Month_Sales
+	 
+    
+  FROM [US_electricity_sales_revenue].[dbo].['Monthly-States$']
+
+where State='NC'  and Year=2023
  
